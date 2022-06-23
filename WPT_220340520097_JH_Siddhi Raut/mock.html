@@ -1,0 +1,138 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Books</title>
+	<script src="jquery-3.5.1.min.js">
+
+	</script>
+
+	<script>
+		$(()=>{
+			function showdata(){
+
+				let ajaxpars = {
+
+					data: {},
+					url: "http://localhost:8081/ssel",
+					type: 'get',
+					dataType: "JSON",
+					sucsess: (dgive)=>{
+						items = (dgive);
+
+						let itemcontents="";
+
+						for(let i = 0;i<books.length;i++){
+
+						itemcontents += "<br/>" + book[i].bookid + " "+book[i].bookname+ " "+book[i].price;
+
+						}
+						$("#data").html(itemcontents);
+					},
+
+				error:(error)=>{
+					console.log("server not called");
+				}
+
+
+			
+				};
+				$.ajax(ajaxpars);
+
+			}
+			showdata();
+		});
+
+		$("#bookid").blur(()=>{
+			let it={bookid:$("#bookid").val()};
+			console.log(it.bookid);
+
+			let ajax={
+
+				data:it,
+				url:"http://localhost:8081/ssel",
+					type: 'get',
+					dataType: "JSON",
+					success(out) =>{
+						console.log("server not found");
+						if(out.status){
+							$("#bookname").val(out.details.bookname);
+							$("#price").val(out.details.price);
+							$("#msg").html("book data found");
+						}
+						else{
+							$("#bookname").val("");
+							$("price").val("");
+							$("#msg").html("book data not found")
+						}
+					};
+					error.(error)=>{
+						console.log("server not called0");
+
+
+					}
+
+			}
+		
+			$.ajax(ajaxpars);
+		});
+
+		$("#update").click(()=>{
+			let insertitem ={bookid: $("#bookid").val(),bookname:$("#bookname".val(),price:$("#price").val())};
+			console.log("added ");
+			console.log(insertitem);
+
+			let ajax={
+				data: insertitem,
+					url: "http://localhost:8081/ssel",
+					type: 'get',
+					dataType: "JSON",
+					sucsess: (dgive)=>{
+						console.log("server is connected" +dgive);
+						if(dgive){
+							$("#msg").html("item updated");
+						}
+						else{
+							$("#msg").html("item not updated");
+						}
+					},
+
+				error:(error)=>{
+					console.log("server not called");
+				}
+
+
+			
+				}
+				$.ajax(ajaxpars);
+
+			
+			showdata();
+
+			
+		});
+	
+
+
+	</script>
+</head>
+<body>
+	<h1>Books</h1>
+	<hr>
+	<br><br>
+	<input type="text" id="bookid" placeholder="book id"/>
+	<snap id="msg">What Happened Book Added or Not</snap>
+	<br><br>
+	<input type="text" id="bookname" placeholder="book name"/>
+	<br><br>
+	<input type="text" id="price" placeholder="price"/>
+	<br><br>
+	<button id="update">Update Book</button>
+</hr>
+<p id="contents">Books Details</p>
+</body>
+</html>
